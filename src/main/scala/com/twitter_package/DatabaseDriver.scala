@@ -26,6 +26,8 @@ import com.twitter_package.models.TweetModel
 import com.twitter_package.models.Models._
 
 
+import scala.collection.mutable.ListBuffer
+
 import scala.concurrent.duration._
 import scala.concurrent.Await
 
@@ -42,7 +44,6 @@ class DatabaseDriver {
 
 	def follow(aid:String,bid:String)= userDr.follow(aid,bid)
 
-
 	def unfollow(aid:String,bid:String)= userDr.unfollow(aid,bid)
 
 
@@ -53,14 +54,6 @@ class DatabaseDriver {
 				case _ =>Future{TweetNotCreated}
 			}  
 		}.flatMap(m => m)
-		/*
-		if(userDr.isExist(tweetModel.authorId)){
-			tweetDr.newTweet(tweetModel)
-		}else {
-			println("not exist user")
-			Future{TweetNotCreated}
-		}
-		*/
 	} 
 
 	def deleteTweet(id:String) = tweetDr.deleteTweet(BSONObjectID(id))
@@ -69,17 +62,45 @@ class DatabaseDriver {
 
 	def getMyTweets(id:String)= tweetDr.getUserTweets(BSONObjectID(id))
 
-	def getMyTimeLine(id:String)=
-	{   ///// implement after finishinf follow method
-		userDr.findUserById(BSONObjectID(id)).map{m =>
-			m match {
-				case Some(a) => 
-					tweetDr.getUserTweets(a.followings.head)
-				case _ => Future{ TweetNotCreated}
-			}
-		}.flatMap(tweets => tweets)
-		
-	}
+	def getMyTimeLine(id:String)= { 
+		    var list = new ListBuffer[com.twitter_package.models.TweetModel]
+            //var list = new ListBuffer[List[com.twitter_package.models.TweetModel]]   
+			
+	         val fut1: Future[List[com.twitter_package.models.UserModel]] = userDr.getUserfindUserById(BSONObjectID(id))
+	         fut1.onSuccess {
+		      case users =>  
+		        for(user <- users)
+		           for(userId <- user.followings){
+	                 println("followings : "+ userId)
+	                 var fut = tweetDr.getUserTweets(userId)
+					 fut.onSuccess { 
+		            	case tweets =>
+		                   for(tweet <- tweets){
+		                      list += tweet 
+		                      println("found tweets: " + tweet.body)
+	                      	}
+	                }
+	        }  
+	         }
+	        
+        			
+			val future1: Future[List[com.twitter_package.models.TweetModel]]= tweetDr.getUserTweets(BSONObjectID(id))
+            future1.onSuccess { 
+            	case tweets =>
+                   for(tweet <- tweets){
+                      list += tweet 
+                    //  println("found tweets: " + tweet.body)
+                    }
+            } 
+           Thread.sleep(1000)
+             list.toList 
+            // Future{list}
+           // println("input list : " + list)            
+		    
+
+	        }
+
+
 	
 
 

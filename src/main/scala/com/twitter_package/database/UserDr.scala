@@ -42,6 +42,12 @@ class UserDr extends MongoDr {
 	    
 	}
 
+	def getUserfindUserById(id:BSONObjectID) ={  
+		collection.find(BSONDocument("_id" -> id)).
+        cursor[UserModel].
+        collect[List](1)
+
+	}
 
 	def findUserById(id: BSONObjectID) = {
 		println(id)

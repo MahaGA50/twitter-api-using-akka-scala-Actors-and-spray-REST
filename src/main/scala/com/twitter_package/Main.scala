@@ -21,7 +21,7 @@ object Main extends App {
   implicit val executionContext = system.dispatcher
   implicit val timeout = Timeout(10 seconds)
 
-  IO(Http).ask(Http.Bind(listener = api,"localhost",8080))
+  IO(Http).ask(Http.Bind(listener = api,"localhost",8090))
     .mapTo[Http.Event]
     .map {
       case Http.Bound(address) =>

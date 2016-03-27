@@ -66,12 +66,14 @@ trait RestApi extends HttpService with ActorLogging { actor: Actor =>
         path(Segment / "home"){ id =>
          get {  requestContext =>
           val responder = createResponder(requestContext)
+          responder ! db.getMyTimeLine(id.toString()).map{tweet  => toTweetResponse(tweet) }
+          /*         
           db.getMyTweets(id.toString()).onComplete{
                 case Failure(e) => throw e;responder ! TweetNotCreated
                 case Success(m) => println("home is "+m.getClass + " "+ m.toString());
                 responder ! m.map{ tweet =>toTweetResponse(tweet) }
             }
-        
+          */
           }
         }~
         path(Segment / "tweets") { id =>
