@@ -43,7 +43,7 @@ class DatabaseDriver {
 	def follow(aid:String,bid:String)= userDr.follow(aid,bid)
 
 
-//	def unfollow(aid:String,bid:String)= userDr.unfollow(aid,bid)
+	def unfollow(aid:String,bid:String)= userDr.unfollow(aid,bid)
 
 
 	def addTweet(tweetModel:TweetModel) ={
