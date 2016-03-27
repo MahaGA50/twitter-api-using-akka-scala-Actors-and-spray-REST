@@ -1,4 +1,4 @@
-name := "Twitter_Project1"
+name := "twitter_scala_api"
 
 version := "0.1"
 
