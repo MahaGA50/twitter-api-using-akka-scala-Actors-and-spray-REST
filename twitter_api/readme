@@ -1,0 +1,36 @@
+1- sign up :
+
+	curl -v -H "Content-Type: application/json" -X POST http://127.0.0.1:8090/users/signup -d '{"username":"<your username>","email":"<youe email>","password":"<your password>"}'
+
+
+2- login :
+	
+	curl -v -H "Content-Type: application/json" -X POST http://127.0.0.1:8090/users/login -d '{"email":"<youe email>","password":"<your password>"}'
+
+3- Timeline :
+
+	curl -v http://localhost:8090/users/<user id>/home
+
+4- My Tweets :
+
+	curl -v http://localhost:8090/users/<user id>/tweets
+
+5- Add Tweet :
+
+	curl -v -H "Content-Type: application/json" -X POST http://127.0.0.1:8090/tweets -d '{"authorId":"<author id>","body":"<tweet body>"}'
+
+6- Get Tweet :
+
+	curl -v http://localhost:8090/tweets/<tweet id>
+
+7- Delete Tweet :
+
+	curl -v -H "Content-Type: application/json" -X DELETE  http://127.0.0.1:8090/tweets/<tweet id>
+
+8- Follow User :
+
+	curl -v http://localhost:8090/users/<user A id>/follow/<user B id>
+
+9- Unfollow User :
+
+	curl -v http://localhost:8090/users/<user A id>/unfollow/<user B id>
